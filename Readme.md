@@ -1,6 +1,6 @@
-Work carried out at Computational Breast Imaging Group (Penn Medicine). Development of Deep Learning models for the prediction of Breast Cancer using Mammograms
+Development of Deep Learning models for the prediction of Breast Cancer using Mammograms. Work carried out at `Computational Breast Imaging Group (Penn Medicine)` 
 
-2 frameworks have been used:
+Frameworks used:
 * Keras
 * PyTorch
 
