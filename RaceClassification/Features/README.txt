@@ -1,0 +1,2 @@
+model8_1 : Corresponds to model_resnet50_id8_acc831_loss400
+model9_1 : Corresponds to model_resnet50_id9_acc848_loss376
