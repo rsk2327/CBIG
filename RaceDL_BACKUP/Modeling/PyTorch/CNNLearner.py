@@ -34,7 +34,7 @@ class CNNLearner():
 
 
     def __init__(self,model, trainLoader, optimizer, criterion, scheduler=None, validLoader=None, device = 'cuda',
-                 logFile = './log.txt', modelFolder = "./",
+                 logger = None, modelFolder = "./",
                  modelname_prefix = ""):
 
         self.model = model
@@ -53,8 +53,16 @@ class CNNLearner():
         self.model = self.model.to(self.device)
 
 
-        logging.basicConfig(filename=logFile,level=logging.DEBUG, format='%(message)s', filemode='w')
-        self.logger = logging.getLogger()
+        
+        
+
+        if logger is None:
+            logging.basicConfig(filename='./log.txt',level=logging.DEBUG, format='%(message)s', filemode='w')
+            self.logger = logging.getLogger()
+        else:
+            self.logger = logger
+
+
 
         self.epoch = 0
 
@@ -84,6 +92,9 @@ class CNNLearner():
     def fit(self, num_epochs, lr, save_best_model = True, save_every_epoch = False):
 
         # self.scheduler = torch.optim.lr_scheduler
+
+        if save_every_epoch:
+            save_best_model = False
 
         best_metric = 0.0
         best_epoch = 0
@@ -152,6 +163,9 @@ class CNNLearner():
 
     def fit_one_cycle(self, num_epochs, lr,  save_best_model = True, save_every_epoch = False):
 
+        if save_every_epoch:
+            save_best_model = False
+
         self.scheduler = torch.optim.lr_scheduler.OneCycleLR(self.optimizer, max_lr=lr, steps_per_epoch=len(self.trainLoader), epochs=num_epochs)
 
         best_metric = 0.0
@@ -199,6 +213,7 @@ class CNNLearner():
             self.logger.info(f"Epoch Time : {str(datetime.timedelta(seconds = time.time() - epoch_start_time))}")
 
             self.logger.info(f"Train Loss : {epoch_loss}  Train Acc : {epoch_acc}")
+            print(f"Train Loss : {epoch_loss}  Train Acc : {epoch_acc}")
 
             val_epoch_acc = self.evalModel(self.validLoader)
 
@@ -264,6 +279,7 @@ class CNNLearner():
         val_epoch_acc = val_epoch_acc.cpu().numpy()
 
         self.logger.info(f"Valid Loss : {val_epoch_loss}  Valid Acc : {val_epoch_acc}")
+        print(f"Valid Loss : {val_epoch_loss}  Valid Acc : {val_epoch_acc}")
 
         return val_epoch_acc
 
